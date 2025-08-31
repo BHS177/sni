@@ -255,7 +255,7 @@ export function DashboardPage() {
         )}
 
         {activeTab === 'upload' && (
-          <VideoUpload onNext={handleUploadNext} />
+          <VideoUpload onUpload={handleUploadNext} onClose={() => {}} />
         )}
 
         {activeTab === 'captions' && (

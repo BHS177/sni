@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { PlayIcon, Bars3Icon, XMarkIcon, MoonIcon, SunIcon } from '@heroicons/react/24/outline';
@@ -10,8 +10,7 @@ import {
   CloudArrowUpIcon,
   CpuChipIcon,
   RocketLaunchIcon,
-  CheckIcon,
-  VideoCameraIcon
+  CheckIcon
 } from '@heroicons/react/24/outline';
 
 export function LandingPage() {
@@ -21,7 +20,6 @@ export function LandingPage() {
   
   // Slide button state
   const [slideProgress, setSlideProgress] = useState(0);
-  const [isSliding, setIsSliding] = useState(false);
 
   const features = [
     {
@@ -311,10 +309,9 @@ export function LandingPage() {
                       dragConstraints={{ left: 0, right: 266 }}
                       dragElastic={0.1}
                       dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
-                      onDragEnd={(event, info) => {
+                      onDragEnd={(_, info) => {
                         if (info.offset.x >= 266) {
                           // Slide completed to extremity - navigate to sign in
-                          setIsSliding(true);
                           setTimeout(() => {
                             navigate('/login');
                           }, 300);
@@ -323,7 +320,7 @@ export function LandingPage() {
                           setSlideProgress(0);
                         }
                       }}
-                      onDrag={(event, info) => {
+                      onDrag={(_, info) => {
                         const progress = Math.min(Math.max(info.offset.x / 266, 0), 1);
                         setSlideProgress(progress);
                       }}

@@ -16,15 +16,24 @@ import { formatFileSize, isVideoFile } from '../utils';
 import type { UploadProgress } from '../types';
 
 interface VideoUploadProps {
-  onNext?: () => void;
+  onUpload: (file: File) => void;
+  onClose: () => void;
 }
 
-export function VideoUpload({ onNext }: VideoUploadProps) {
+export function VideoUpload({ onUpload, onClose }: VideoUploadProps) {
   const { uploads, uploadFiles, removeUpload, clearCompleted } = useFileUpload();
   const [dragActive, setDragActive] = useState(false);
 
   // Check if all uploads are completed
   const allUploadsCompleted = uploads.length > 0 && uploads.every(upload => upload.status === 'completed' || upload.status === 'error');
+
+  const handleClose = () => {
+    onClose();
+  };
+
+  const handleUpload = (file: File) => {
+    onUpload(file);
+  };
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const videoFiles = acceptedFiles.filter(isVideoFile);
@@ -33,25 +42,13 @@ export function VideoUpload({ onNext }: VideoUploadProps) {
       const dt = new DataTransfer();
       videoFiles.forEach(file => dt.items.add(file));
       uploadFiles(dt.files);
-    }
-  }, [uploadFiles]);
-
-
-  const handleUploadMore = () => {
-    // Clear the success state to show the upload area again
-    // Or trigger file dialog
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'video/*';
-    input.multiple = true;
-    input.onchange = (e) => {
-      const target = e.target as HTMLInputElement;
-      if (target.files && target.files.length > 0) {
-        uploadFiles(target.files);
+      
+      // Call onUpload for the first file
+      if (videoFiles.length > 0) {
+        handleUpload(videoFiles[0]);
       }
-    };
-    input.click();
-  };
+    }
+  }, [uploadFiles, handleUpload]);
 
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -84,6 +81,14 @@ export function VideoUpload({ onNext }: VideoUploadProps) {
 
   return (
     <div className="space-y-6">
+      {/* Header with close button */}
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Upload Videos</h2>
+        <Button variant="ghost" size="sm" onClick={handleClose}>
+          <XMarkIcon className="h-5 w-5" />
+        </Button>
+      </div>
+
       {(uploads.length === 0) && (
         <Card>
           <CardContent className="p-8">

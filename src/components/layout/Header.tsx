@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import { 
   SunIcon, 
   MoonIcon, 
-  VideoCameraIcon,
   Bars3Icon,
   XMarkIcon,
   UserIcon,
