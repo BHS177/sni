@@ -1,0 +1,18 @@
+.root {
+    @apply inline-flex items-center space-x-[0.5em] text-base text-left;
+}
+
+.icon {
+    @apply p-[0.5em] bg-gradient-to-r from-primary-500 to-secondary-500 rounded-[0.75em];
+    svg {
+        @apply w-[1.5em] h-[1.5em] text-white;
+    }
+}
+
+.text {
+    @apply text-[1.25em] font-bold;
+    line-height: 1.25;
+    small {
+        @apply text-[0.7em] font-normal opacity-70;
+    }
+}
